@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Estate Syndication Calculator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            max-width: 600px;
+            width: 100%;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #007BFF;
+        }
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+            color: #555;
+        }
+        input {
+            width: calc(100% - 20px);
+            margin: 8px 0 20px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            color: white;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .result p {
+            margin: 10px 0;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Real Estate Syndication Calculator</h1>
+        <label for="investment">Investment Amount ($):</label>
+        <input type="number" id="investment" placeholder="Enter investment amount">
+
+        <label for="preferredReturn">Preferred Return Rate (%):</label>
+        <input type="number" id="preferredReturn" placeholder="e.g., 8">
+
+        <label for="holdPeriod">Hold Period (Years):</label>
+        <input type="number" id="holdPeriod" placeholder="e.g., 5">
+
+        <label for="annualNetIncome">Annual Net Income ($):</label>
+        <input type="number" id="annualNetIncome" placeholder="e.g., 50000">
+
+        <label for="equitySplit">Equity Split (Investor %, e.g., 70):</label>
+        <input type="number" id="equitySplit" placeholder="e.g., 70">
+
+        <label for="exitValue">Projected Exit Value ($):</label>
+        <input type="number" id="exitValue" placeholder="e.g., 1000000">
+
+        <button onclick="calculate()">Calculate</button>
+
+        <div class="result" id="results"></div>
+    </div>
+
+    <script>
+        function calculate() {
+            // Input values
+            const investment = parseFloat(document.getElementById('investment').value);
+            const preferredReturn = parseFloat(document.getElementById('preferredReturn').value) / 100;
+            const holdPeriod = parseFloat(document.getElementById('holdPeriod').value);
+            const annualNetIncome = parseFloat(document.getElementById('annualNetIncome').value);
+            const equitySplit = parseFloat(document.getElementById('equitySplit').value) / 100;
+            const exitValue = parseFloat(document.getElementById('exitValue').value);
+
+            // Validations
+            if (isNaN(investment) || isNaN(preferredReturn) || isNaN(holdPeriod) || isNaN(annualNetIncome) || isNaN(equitySplit) || isNaN(exitValue)) {
+                document.getElementById('results').innerHTML = `<p style="color: red;">Please fill in all fields correctly!</p>`;
+                return;
+            }
+
+            // Calculations
+            const totalPreferredReturns = investment * preferredReturn * holdPeriod;
+            const annualCashFlow = annualNetIncome * equitySplit;
+            const totalCashFlow = annualCashFlow * holdPeriod;
+            const profitFromSale = (exitValue * equitySplit);
+            const totalInvestorReturns = totalPreferredReturns + totalCashFlow + profitFromSale;
+            const roi = ((totalInvestorReturns - investment) / investment) * 100;
+
+            // Display Results
+            document.getElementById('results').innerHTML = `
+                <p><strong>Total Preferred Returns:</strong> $${totalPreferredReturns.toFixed(2)}</p>
+                <p><strong>Annual Cash Flow:</strong> $${annualCashFlow.toFixed(2)}</p>
+                <p><strong>Profit from Sale:</strong> $${profitFromSale.toFixed(2)}</p>
+                <p><strong>Total Investor Returns:</strong> $${totalInvestorReturns.toFixed(2)}</p>
+                <p><strong>ROI:</strong> ${roi.toFixed(2)}%</p>
+            `;
+        }
+    </script>
+</body>
+</html>
